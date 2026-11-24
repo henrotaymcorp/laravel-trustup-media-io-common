@@ -63,4 +63,19 @@ class StorableMediaTransformerTest extends TestCase
     {
         $this->assertTrue(StorableMediaTransformer::isBase64String($value));
     }
+
+    public static function emptyContents(): array
+    {
+        return [
+            'empty string' => [''],
+            'prefix with no content' => ['data:image/png;base64,'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('emptyContents')]
+    public function empty_content_is_not_recognised_as_base64(string $value): void
+    {
+        $this->assertFalse(StorableMediaTransformer::isBase64String($value));
+    }
 }
