@@ -84,10 +84,7 @@ class StorableMediaTransformer implements StorableMediaTransformerContract
     protected function isBase64(string $resource): bool
     {
         // strip out data uri scheme information (see RFC 2397)
-        if (str_contains($resource, ';base64,')) {
-            [$_, $resource] = explode(';', $resource);
-            [$_, $resource] = explode(',', $resource);
-        }
+        $resource = preg_replace('~^data:[a-zA-Z0-9.+-]+/[a-zA-Z0-9.+-]+;base64,~', '', $resource) ?? '';
 
         // strict mode filters for non-base64 alphabet characters
         $binary = base64_decode($resource, true);
