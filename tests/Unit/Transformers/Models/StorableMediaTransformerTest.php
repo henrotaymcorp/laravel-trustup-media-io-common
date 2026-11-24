@@ -37,4 +37,12 @@ class StorableMediaTransformerTest extends TestCase
 
         $this->assertTrue($media->isBase64());
     }
+
+    #[Test]
+    public function bare_base64_is_base64(): void
+    {
+        $media = $this->transformer()->fromResource(base64_encode("hello"));
+
+        $this->assertTrue($media->isBase64());
+    }
 }
