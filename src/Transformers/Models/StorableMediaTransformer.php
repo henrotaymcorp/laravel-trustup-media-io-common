@@ -91,6 +91,10 @@ class StorableMediaTransformer implements StorableMediaTransformerContract
         // strip out data uri scheme information (see RFC 2397)
         $content = preg_replace('~^data:[a-zA-Z0-9.+-]+/[a-zA-Z0-9.+-]+;base64,~', '', $value) ?? '';
 
+        if ($content === '') {
+            return false;
+        }
+
         // strict mode filters for non-base64 alphabet characters
         $binary = base64_decode($content, true);
 
