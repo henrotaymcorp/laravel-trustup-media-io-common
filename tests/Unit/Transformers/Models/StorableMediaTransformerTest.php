@@ -1,4 +1,5 @@
 <?php
+
 namespace Henrotaym\LaravelTrustupMediaIoCommon\Tests\Unit\Transformers\Models;
 
 use Henrotaym\LaravelTrustupMediaIoCommon\Contracts\Transformers\Models\StorableMediaTransformerContract;
@@ -26,7 +27,7 @@ class StorableMediaTransformerTest extends TestCase
     #[Test]
     public function address_containing_base64_marker_is_a_url(): void
     {
-        $media = $this->transformer()->fromResource("http://internal-host/x;base64,QQ==");
+        $media = $this->transformer()->fromResource('http://internal-host/x;base64,QQ==');
 
         $this->assertTrue($media->isUrl());
         $this->assertFalse($media->isBase64());
@@ -35,7 +36,7 @@ class StorableMediaTransformerTest extends TestCase
     #[Test]
     public function data_uri_is_base64(): void
     {
-        $media = $this->transformer()->fromResource("data:image/png;base64,".base64_encode("hello"));
+        $media = $this->transformer()->fromResource('data:image/png;base64,'.base64_encode('hello'));
 
         $this->assertTrue($media->isBase64());
     }
@@ -43,7 +44,7 @@ class StorableMediaTransformerTest extends TestCase
     #[Test]
     public function bare_base64_is_base64(): void
     {
-        $media = $this->transformer()->fromResource(base64_encode("hello"));
+        $media = $this->transformer()->fromResource(base64_encode('hello'));
 
         $this->assertTrue($media->isBase64());
     }
