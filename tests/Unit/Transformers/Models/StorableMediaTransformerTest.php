@@ -78,4 +78,24 @@ class StorableMediaTransformerTest extends TestCase
     {
         $this->assertFalse(StorableMediaTransformer::isBase64String($value));
     }
+
+    public static function nonBase64Strings(): array
+    {
+        return [
+            'capitals in markers' => ['DATA:image/png;BASE64,QQ=='],
+            'address with marker' => ['http://internal-host/x;base64,QQ=='],
+            'data uri not at the start' => ['http://internal-host/data:image/png;base64,QQ=='],
+            'prefix followed by invalid base64' => ['data:image/png;base64,not base64!'],
+            'parameters before the marker' => ['data:application/pdf;name=x.pdf;base64,QQ=='],
+            'line break inside content' => ["aGVs\nbG8="],
+            'raw pdf with marker' => ["%PDF-1.4\n; x data:a/b;base64,QQ==\x00\xff"],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('nonBase64Strings')]
+    public function string_is_not_recognised_as_base64(string $value): void
+    {
+        $this->assertFalse(StorableMediaTransformer::isBase64String($value));
+    }
 }
