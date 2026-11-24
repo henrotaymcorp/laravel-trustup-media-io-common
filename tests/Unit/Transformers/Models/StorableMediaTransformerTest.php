@@ -3,6 +3,8 @@ namespace Henrotaym\LaravelTrustupMediaIoCommon\Tests\Unit\Transformers\Models;
 
 use Henrotaym\LaravelTrustupMediaIoCommon\Contracts\Transformers\Models\StorableMediaTransformerContract;
 use Henrotaym\LaravelTrustupMediaIoCommon\Tests\TestCase;
+use Henrotaym\LaravelTrustupMediaIoCommon\Transformers\Models\StorableMediaTransformer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 class StorableMediaTransformerTest extends TestCase
@@ -44,5 +46,21 @@ class StorableMediaTransformerTest extends TestCase
         $media = $this->transformer()->fromResource(base64_encode("hello"));
 
         $this->assertTrue($media->isBase64());
+    }
+
+    public static function base64Strings(): array
+    {
+        return [
+            'data uri' => ['data:image/png;base64,aGVsbG8='],
+            'bare base64' => ['aGVsbG8='],
+            'capitals in media type only' => ['data:image/PNG;base64,QQ=='],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('base64Strings')]
+    public function string_is_recognised_as_base64(string $value): void
+    {
+        $this->assertTrue(StorableMediaTransformer::isBase64String($value));
     }
 }
