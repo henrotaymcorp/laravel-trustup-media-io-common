@@ -47,7 +47,8 @@ Left alone, any received document whose bytes contain the marker keeps failing t
 -   Data URI marker after other text (for example `http://internal-host/x;base64,QQ==`) : not recognised as base64. Today it is, so this is an intended tightening.
 -   Empty text : not recognised as base64. Today it is, so this is an intended change.
 -   A data URI with extra parameters before the marker (for example `data:application/pdf;name=x.pdf;base64,...`) : not recognised as base64. Today it makes the storing operation crash, so nothing that works today stops working.
--   The data URI prefix in upper or mixed case (for example `DATA:IMAGE/PNG;BASE64,`) : recognised, like its lower-case form.
+-   Capitals in the `data:` or `;base64,` markers (for example `DATA:image/png;BASE64,QQ==`) : not recognised as base64, as today. The storage side only understands the lower-case markers, so recognising them would turn content stored today into a failure.
+-   Capitals in the media type only (for example `data:image/PNG;base64,QQ==`) : recognised, as today.
 -   A well-formed data URI prefix followed by nothing, or by text that is not valid base64 : not recognised as base64.
 -   Text that is valid base64 only once whitespace or line breaks are ignored : not recognised as base64, as today.
 
