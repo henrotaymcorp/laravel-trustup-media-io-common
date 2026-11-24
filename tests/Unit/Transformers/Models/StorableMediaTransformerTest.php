@@ -20,4 +20,13 @@ class StorableMediaTransformerTest extends TestCase
         $this->assertTrue($media->isString());
         $this->assertFalse($media->isBase64());
     }
+
+    #[Test]
+    public function address_containing_base64_marker_is_a_url(): void
+    {
+        $media = $this->transformer()->fromResource("http://internal-host/x;base64,QQ==");
+
+        $this->assertTrue($media->isUrl());
+        $this->assertFalse($media->isBase64());
+    }
 }
