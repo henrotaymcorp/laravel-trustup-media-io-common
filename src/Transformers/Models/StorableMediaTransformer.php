@@ -89,6 +89,7 @@ class StorableMediaTransformer implements StorableMediaTransformerContract
     public static function isBase64String(string $value): bool
     {
         // strip out data uri scheme information (see RFC 2397)
+        // markers stay lower case: Spatie's addMediaFromBase64 only strips a lower-case ';base64'
         $content = preg_replace('~^data:[a-zA-Z0-9.+-]+/[a-zA-Z0-9.+-]+;base64,~', '', $value) ?? '';
 
         if ($content === '') {
