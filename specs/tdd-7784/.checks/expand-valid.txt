@@ -1,0 +1,4 @@
+[VERDICT: GO]
+
+## TL;DR
+Mutation file valid.

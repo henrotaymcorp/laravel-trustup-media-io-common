@@ -83,17 +83,24 @@ class StorableMediaTransformer implements StorableMediaTransformerContract
      */
     protected function isBase64(string $resource): bool
     {
+        return static::isBase64String($resource);
+    }
+
+    public static function isBase64String(string $value): bool
+    {
         // strip out data uri scheme information (see RFC 2397)
-        if (str_contains($resource, ';base64,')) {
-            [$_, $resource] = explode(';', $resource);
-            [$_, $resource] = explode(',', $resource);
+        // markers stay lower case: Spatie's addMediaFromBase64 only strips a lower-case ';base64'
+        $content = preg_replace('~^data:[a-zA-Z0-9.+-]+/[a-zA-Z0-9.+-]+;base64,~', '', $value) ?? '';
+
+        if ($content === '') {
+            return false;
         }
 
         // strict mode filters for non-base64 alphabet characters
-        $binary = base64_decode($resource, true);
+        $binary = base64_decode($content, true);
 
         return $binary !== false
-            && base64_encode($binary) === $resource;
+            && base64_encode($binary) === $content;
     }
 
     protected function isFile($resource): bool
